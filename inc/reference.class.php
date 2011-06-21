@@ -66,7 +66,7 @@ class Reference{
 		global $post;
 		$ref_options = get_option( 'ref_options' );
 		$options = get_post_meta($post->ID, '_ref',true);
-		if(isset($options['related']) && is_array($options['related']) && $options['related'][1] != ""){
+		if(isset($options['related']) && is_array($options['related']) && $options['related'][0] != ""){
 			$ref .= '<div class="ref-wrapper" id="ref-related"><h5 class="box primary">Related Entries</h5><ul>';
 			foreach($options['related'] as $re){
 				if(get_post_type($re) == 'post' && get_post_status($re) == 'publish'){

@@ -2,7 +2,7 @@
 	/*
 	Plugin Name: Reference
 	Plugin URI: https://github.com/nblue/Reference-Wordpress-Plugin
-	Description: Add references from posts, urls, and books into your post.
+	Description: Add references from posts, urls, and books into your post. Featured Google Books Search and Preview.
 	Author: Nice
 	Version: 0.1
 	Author URI: http://blog.u-blue.com
