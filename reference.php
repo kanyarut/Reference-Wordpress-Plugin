@@ -1,11 +1,11 @@
 <?php
 	/*
 	Plugin Name: Reference
-	Plugin URI: http://www.example.net
+	Plugin URI: https://github.com/nblue/Reference-Wordpress-Plugin
 	Description: Add references from posts, urls, and books into your post.
 	Author: Nice
 	Version: 0.1
-	Author URI: http://www.example.net
+	Author URI: http://blog.u-blue.com
 	*/
 $x = WP_PLUGIN_DIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 require_once($x.'inc/reference.class.php');
