@@ -1,3 +1,4 @@
+/***** Front-end styles *****/
 .ref-wrapper{
 	clear: both;
 	margin: 10px 0 15px 0;
@@ -11,6 +12,86 @@
 .ref-wrapper .box{
 	margin-left: 0;
 }
+.ref_book_grid, .ref_book_full{
+	clear: both;
+	padding: 0;
+	margin: 0;
+}
+.ref_book_grid .ref_book_image{
+	float: left;
+	margin: 0;
+	padding: 5px;
+	width: 68px;
+	background: #FFF;
+	
+	-moz-border-radius: 2px;
+	-o-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+}
+.ref_book_grid li{
+	list-style: none;
+	padding: 5px;
+	margin: 0 0 10px 0;
+	overflow: hidden;
+	
+	border:1px solid #FFF;
+	background: #EEE;
+	background: rgba(230,230,230,.3);
+	
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+.ref_book_grid .ref_preview_book{
+	float: right;
+}
+.ref_book_grid .ref_book_detail{
+	float: left;
+	width: 60%;
+	padding: 0 0 0 5px;
+}
+.ref_book_full li{
+	list-style: none;
+	padding: 5px;
+	margin: 0 0 10px 0;
+	overflow: hidden;
+	
+	position: relative;
+	border:1px solid #FFF;
+	background: #EEE;
+	background: rgba(230,230,230,.3);
+	
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+.ref_book_full .ref_book_image{
+	float: left;
+	margin: 0;
+	padding: 5px;
+	width: 128px;
+	background: #FFF;
+	
+	-moz-border-radius: 2px;
+	-o-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+}
+.ref_book_full .ref_preview_book{
+	float: none;
+	position: absolute;
+	bottom: 4px;
+	right: 6px;
+}
+.ref_book_full .ref_book_detail{
+	float: left;
+	width: 70%;
+	padding: 0 0 0 10px;
+}
+/***** Post edit styles *****/
 .book_pagination{
 	padding: 0;
 	margin: 0;
@@ -87,6 +168,11 @@
 	height: 190px;
 	overflow: hidden;
 	float: left;
+	cursor: pointer;
+	background: #FFF ;
+}
+.ref-book-image{
+	width: 128px;
 }
 .ref_a_book_detail{
 	width: 320px;
@@ -112,42 +198,4 @@
 .ref-gbook{
 	float: right;
 	padding: 0 10px 0 0;
-}
-.ref_book_image{
-	float: left;
-	margin: 0;
-	padding: 5px;
-	background: #FFF;
-	
-	-moz-border-radius: 2px;
-	-o-border-radius: 2px;
-	-webkit-border-radius: 2px;
-	border-radius: 2px;
-}
-.ref_book_grid{
-	clear: both;
-	padding: 0;
-	margin: 0;
-}
-.ref_book_grid li{
-	list-style: none;
-	padding: 5px;
-	margin: 0 0 10px 0;
-	overflow: hidden;
-	
-	background: #EEE;
-	background: rgba(230,230,230,.3);
-	
-	-moz-border-radius: 5px;
-	-o-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-}
-.ref_book_grid .ref_preview_book{
-	float: right;
-}
-.ref_book_detail{
-	float: left;
-	width: 60%;
-	padding: 0 0 0 5px;
 }

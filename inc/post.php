@@ -54,7 +54,8 @@ if(isset($options['book']) && is_array($options['book'])){
 	$i = 1;
 	foreach($options['book'] as $bo){ ?>
 	<div class="ref_a_book">
-		<div class="ref_a_book_image" style="background:url(<?php echo (isset($bo['thumbnail']))?$bo['thumbnail']:''; ?>) no-repeat">
+		<div class="ref_a_book_image">
+			<img src="<?php echo ( isset($bo['thumbnail'])&& $bo['thumbnail']!='' )?$bo['thumbnail']:$url.'../img/custombookimage.gif'; ?>" class="ref-book-image" />
 			<input type="hidden" name="ref[book][<?php echo $i ?>][thumbnail]" value="<?php echo (isset($bo['thumbnail']))?$bo['thumbnail']:''; ?>" class="ref-book-thumbnail" />
 			<input type="hidden" name="ref[book][<?php echo $i ?>][thumbnailsm]" value="<?php echo (isset($bo['thumbnailsm']))?$bo['thumbnailsm']:''; ?>" class="ref-book-thumbnailsm" />
 			<input type="hidden" name="ref[book][<?php echo $i ?>][haspreview]" value="<?php echo (isset($bo['haspreview']))?$bo['haspreview']:''; ?>" class="ref-book-haspreview" />
@@ -88,6 +89,7 @@ if(isset($options['book']) && is_array($options['book'])){
 }else{ ?>
 <div class="ref_a_book">
 	<div class="ref_a_book_image">
+		<img src="<?php echo $url?>../img/custombookimage.gif" class="ref-book-image" />
 		<input type="hidden" name="ref[book][1][thumbnail]" value="" class="ref-book-thumbnail" />
 		<input type="hidden" name="ref[book][1][thumbnailsm]" value="" class="ref-book-thumbnailsm" />
 		<input type="hidden" name="ref[book][1][haspreview]" value="" class="ref-book-haspreview" />

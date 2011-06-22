@@ -36,6 +36,7 @@ jQuery(document).ready(function(){
 		
 		$tmp = '<div class="ref_a_book">'
 				+'<div class="ref_a_book_image">'
+				+'	<img src="'+pluginurl+'../img/custombookimage.gif" class="ref-book-image" />'
 				+'	<input type="hidden" name="ref[book]['+book+'][thumbnail]" value="" class="ref-book-thumbnail" />'
 				+'	<input type="hidden" name="ref[book]['+book+'][thumbnailsm]" value="" class="ref-book-thumbnailsm" />'
 				+'	<input type="hidden" name="ref[book]['+book+'][haspreview]" value="" class="ref-book-haspreview" />'
@@ -124,7 +125,11 @@ jQuery(document).ready(function(){
 		$currentbook.find('.ref-book-haspreview').val(haspreview);
 		$currentbook.find('.ref-book-thumbnail').val(thumbnail);
 		$currentbook.find('.ref-book-thumbnailsm').val(thumbnailsm);
-		$currentbook.find('.ref_a_book_image').css('background-image','url('+thumbnail+')');
+		
+		if(thumbnail)
+			$currentbook.find('.ref-book-image').attr('src', thumbnail );
+		else
+			$currentbook.find('.ref-book-image').attr('src', pluginurl+'../img/custombookimage.gif' );
 		
 		jQuery('#ref-book-dialog').dialog('close');
 		return false;

@@ -23,6 +23,7 @@ class Reference{
 		
 		$x = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 		wp_enqueue_style('ref-style', $x.'../reference.css' );
+		wp_enqueue_script('ref-filemanager', $x.'../js/file_manager.js' );
 		wp_enqueue_script('jquery-ui-core');
 		wp_enqueue_script('jquery-ui-dialog');
 		wp_enqueue_style('jqueryui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css' );
@@ -62,40 +63,79 @@ class Reference{
 	}
 	
 	function show($content){
-		$ref = '';
-		global $post;
-		$ref_options = get_option( 'ref_options' );
-		$options = get_post_meta($post->ID, '_ref',true);
-		if(isset($options['related']) && is_array($options['related']) && $options['related'][0] != ""){
-			$ref .= '<div class="ref-wrapper" id="ref-related"><h5 class="box primary">Related Entries</h5><ul>';
-			foreach($options['related'] as $re){
-				if(get_post_type($re) == 'post' && get_post_status($re) == 'publish'){
-					$ref .= '<li class="boxlist"><a href="'.get_permalink($re).'" class="box accent" >'.get_the_title($re).'</a></li>';
+		if(is_single()){
+			$ref = '';
+			global $post;
+			$ref_options = get_option( 'ref_options' );
+			$options = get_post_meta($post->ID, '_ref',true);
+			
+			$i = 0;
+			if( isset($options['related']) && is_array($options['related']) && count($options['related']) > 0 ){
+				
+				foreach($options['related'] as $re){
+					if(get_post_type($re) == 'post' && get_post_status($re) == 'publish'){
+						if($i==0){
+							$ref .= '<div class="ref-wrapper" id="ref-related">';
+							if( isset($ref_options['ref_entries_title']) &&  $ref_options['ref_entries_title'] != '' )
+								$ref .= '<h5 class="box primary">'.$ref_options['ref_entries_title'].'</h5>';
+							else if(!isset($ref_options['ref_entries_title']))
+								$ref .= '<h5 class="box primary">'.__('Related Entries').'</h5>';
+							
+							$ref .= '<ul>';
+						}
+						$ref .= '<li class="boxlist"><a href="'.get_permalink($re).'" class="box accent" >'.get_the_title($re).'</a></li>';
+						$i++;
+					}
 				}
-			}	
-			$ref .= '</ul></div>';
-		}
-	 
-		if(isset($options['external']) && is_array($options['external'])  && $options['external'][1]['title'] != ""){
-			$ref .= '<div class="ref-wrapper" id="ref-external"><h5 class="box primary">External References</h5><ul>';
-			foreach($options['external'] as $ex){
-				if($ex['title']!=""){
-					$ref .= '<li class="boxlist"><a href="'.$ex['link'].'" class="box accent">'.$ex['title'].'</a></li>';
+				if($i>0)$ref .= '</ul></div>';
+			}
+		 	
+		 	$i = 0;
+			if( isset($options['external']) && is_array($options['external'])  && count($options['external']) > 0 ){
+				foreach($options['external'] as $ex){
+					if($ex['title']!=""){
+						if($i==0){
+							$ref .= '<div class="ref-wrapper" id="ref-external">';
+							if( isset($ref_options['ref_external_title']) &&  $ref_options['ref_external_title'] != '' )
+								$ref .= '<h5 class="box primary">'.$ref_options['ref_external_title'].'</h5>';
+							else if(!isset($ref_options['ref_external_title']))
+								$ref .= '<h5 class="box primary">'.__('External References').'</h5>';
+							$ref .= '<ul>';
+						}
+						$ref .= '<li class="boxlist"><a href="'.$ex['link'].'" class="box accent">'.$ex['title'].'</a></li>';
+						$i++;
+					}
+				}
+				if($i>0)$ref .= '</ul></div>';
+			}
+			
+			$i = 0;
+			if( isset($options['book']) && is_array($options['book']) && count($options['book']) > 0 ){
+				foreach($options['book'] as $bo){
+					if($bo['title']!=""){
+						if($i==0){
+							$ref .= '<div class="ref-wrapper" id="ref-book">';
+							if( isset($ref_options['ref_book_title']) &&  $ref_options['ref_book_title'] != '' )
+								$ref .= '<h5 class="box primary">'.$ref_options['ref_book_title'].'</h5>';
+							else if(!isset($ref_options['ref_book_title']))
+								$ref .= '<h5 class="box primary">'.__('Book References').'</h5>';
+						}
+						$i++;
+					}
+				}
+				if($i>0){
+					if(is_array($ref_options) && isset($ref_options['ref_display']) && $ref_options['ref_display'] == 'list'){
+						$ref .= $this->book_show_list($options);
+					}else if(is_array($ref_options) && isset($ref_options['ref_display']) && $ref_options['ref_display'] == 'full'){	
+						$ref .= $this->book_show_full($options);
+					}else{
+						$ref .= $this->book_show_grid($options);
+					}
+					$ref .= '</div>';
 				}
 			}
-			$ref .= '</ul></div>';
-		}
-		
-		if(isset($options['book']) && is_array($options['book']) && $options['book'] > 0 && $options['book'][1]['title'] != ""){
-			$ref .= '<div class="ref-wrapper" id="ref-book"><h5 class="box primary">Book References</h5>';
-			if(is_array($ref_options) && isset($ref_options['ref_display']) && $ref_options['ref_display'] == 'list'){
-				$ref .= $this->book_show_list($options);
-			}else{
-				$ref .= $this->book_show_grid($options);
-			}
-			$ref .= '</div>';
-		}
-		return $content.$ref;
+			return $content.$ref;
+		} // is_single()
 	}
 	
 	function book_show_grid($options){
@@ -108,10 +148,11 @@ class Reference{
 				$link = true;
 			}
 			if($bo['title']!=""){
-				$ref .= '<li class="ref_book_grid">';
+				$ref .= '<li>';
 				
 				if(isset($bo['haspreview']) && $bo['haspreview']=='1' && $bo['isbn']!=''){
-					$ref .= ' <a href="'.$x.'../previewbook.php?isbn='.$bo['isbn'].'" class="ref_preview_book" title="'.$bo['title'].'"><img src="'.$x.'../img/gbs_preview.png" alt="Google Book Preview" /></a>';
+					$ref .= ' <a href="'.$x.'../previewbook.php?isbn='.$bo['isbn'].'" class="ref_preview_book" title="'.$bo['title'].'">
+							  <img src="'.$x.'../img/gbs_preview.png" alt="Google Book Preview" /></a>';
 				}
 				
 				$ref .= '<div class="book_ref">';
@@ -140,6 +181,54 @@ class Reference{
 		$ref .= "</ul>";
 		return $ref;
 	}
+	
+	function book_show_full($options){
+		$ref = '<ul class="ref_book_full">';
+		$ref_options = get_option( 'ref_options' );
+		$x = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
+		foreach($options['book'] as $bo){
+			$link = false;
+			if(is_array($ref_options) && isset($ref_options['ref_amazon_tag']) && $ref_options['ref_amazon_tag'] != '' && $bo['isbn']!=''){
+				$link = true;
+			}
+			if($bo['title']!=""){
+				$ref .= '<li>';
+				
+				if(isset($bo['haspreview']) && $bo['haspreview']=='1' && $bo['isbn']!=''){
+					$ref .= ' <a href="'.$x.'../previewbook.php?isbn='.$bo['isbn'].'" class="ref_preview_book" title="'.$bo['title'].'">
+							  <img src="'.$x.'../img/gbs_preview.png" alt="Google Book Preview" /></a>';
+				}
+				
+				$ref .= '<div class="book_ref">';
+				
+				if(isset($bo['thumbnail']) && $bo['thumbnail']!=''){
+					if($link)$ref .= '<a href="http://www.amazon.com/dp/'.$bo['isbn'].'?tag='.$ref_options['ref_amazon_tag'].'" title="'.$bo['title'].'">';
+					$ref .= '<img src="'.$bo['thumbnail'].'" class="ref_book_image" />';
+					if($link)$ref .= '</a>';
+				}
+				
+				$ref .= '<div class="ref_book_detail">';
+				
+				$ref .= '<p>';
+				if($link)$ref .= '<a href="http://www.amazon.com/dp/'.$bo['isbn'].'?tag='.$ref_options['ref_amazon_tag'].'" title="'.$bo['title'].'">';
+				$ref .= '<strong>'.$bo['title'].' </strong>';
+				if($link)$ref .= '</a>';
+				if(isset($bo['author']) && $bo['author']!= "" )$ref .= '<br/><em>'.$bo['author'].'</em>';
+				$ref .= '</p>';
+				
+				$ref .= '<p>';
+				if(isset($bo['isbn']) && $bo['isbn']!= "" )$ref .= '<small><strong>ISBN: '.$bo['isbn'].'</strong></small><br/>';
+				if(isset($bo['publisher']) && $bo['publisher'] != "" )$ref .= '<small>Publisher: '.$bo['publisher'].'</small><br/>';
+				if(isset($bo['published']) && $bo['published'] != "" )$ref .= '<small>Published: '.$bo['published'].'</small>';
+				$ref .= '</p>';
+				
+				$ref .= '</div></div></li>';
+			}
+		}
+		$ref .= "</ul>";
+		return $ref;
+	}
+
 	
 	function book_show_list($options){
 		$ref = '<ul class="ref_book_list">';
