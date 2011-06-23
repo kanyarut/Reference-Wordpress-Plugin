@@ -135,7 +135,9 @@ class Reference{
 				}
 			}
 			return $content.$ref;
-		} // is_single()
+		}else{ // is_single()
+			return $content;
+		}
 	}
 	
 	function book_show_grid($options){
