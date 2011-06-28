@@ -141,6 +141,9 @@ ul.ref_book_grid, ul.ref_book_full{
 #ref-book li{
 	clear: both;
 }
+#ref-book img{
+	border: none;
+}
 #ref-book-dialog-search{
 	width: 98%;
 	height: 84%;

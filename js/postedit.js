@@ -74,7 +74,7 @@ jQuery(document).ready(function(){
 	jQuery('.ref_preview_book').live('click',function(e){
 		e.preventDefault();
 		
-		$bookiframe = jQuery("<iframe src='"+pluginurl+'../previewbook.php?isbn='+jQuery(this).attr('href')+"' ></iframe>");
+		$bookiframe = jQuery( '<div id="viewerCanvas" style="margin: 0 auto;"></div> ');
 		
 		$bookiframe.width('700px');
 		$bookiframe.height('590px');
@@ -85,8 +85,20 @@ jQuery(document).ready(function(){
 		
 		$ref_book_review.dialog({width:730,height:650, title: jQuery(this).attr('title').substr(0,60) });
 		
+		showBook(jQuery(this).attr('href'));
+		
 		return false;
 	});
+	
+	function alertBookNotFound() {
+		alert('Cannot load this book for preview');
+		parent.jQuery.fn.colorbox.close(); 
+	}
+	
+	function showBook(isbn) {
+		var viewer = new google.books.DefaultViewer(document.getElementById('viewerCanvas'));
+		viewer.load('ISBN:'+isbn, alertBookNotFound);
+	}
 	
 	
 	jQuery('.ref-book-title, .ref-book-author, .ref-book-isbn').live('keypress',function(e) {
@@ -249,7 +261,9 @@ function loadBook(api, query){
 	if(api && query){
 		jQuery('#ref-book-dialog-search').html('<div id="ref_book_loading"></div>');
 		jQuery.ajax({
-			url: pluginurl+'book.php?key='+encodeURI(api)+'&q='+encodeURI(query),
+			url: ajaxurl,
+			type: 'POST',
+			data: 'action=search_book&key='+api+'&q='+query,
 			success: function(msg){
 				jQuery('#ref-book-dialog-search').html(msg);
 			}
@@ -258,3 +272,4 @@ function loadBook(api, query){
 		alert('Please set Google Book API key to use Google Book Preview.');
 	}
 }
+google.load("books", "0");

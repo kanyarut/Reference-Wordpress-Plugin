@@ -1,15 +1,15 @@
 <?php $per_page = 30;
-if(isset($_GET['key']) && isset($_GET['q']) && $_GET['key']!='' && $_GET['q']!=''){
+if(isset($_POST['key']) && isset($_POST['q']) && $_POST['key']!='' && $_POST['q']!=''){
 	require_once('gbook.class.php');
 	
-	$q = trim($_GET['q']);
-	$k = $_GET['key'];
+	$q = trim($_POST['q']);
+	$k = $_POST['key'];
 	
-	if(!isset($_GET['page']) || $_GET['page']==1){
+	if(!isset($_POST['page']) || $_POST['page']==1){
 		$page = 1;
 		$page_start = 1;
 	}else{
-		$page = $_GET['page'];
+		$page = $_POST['page'];
 		$page_start = (($page*$per_page) - $per_page) +1;
 	}
 	
@@ -84,6 +84,6 @@ if(isset($_GET['key']) && isset($_GET['q']) && $_GET['key']!='' && $_GET['q']!='
 		?>
 	</ul>
 	</div><!-- book_search_meta -->
-<?php }else if($_GET['key']==''){ ?>
+<?php }else if($_POST['key']==''){ ?>
 <p>Please set Google Book API key to use Google Book Preview.</p>
 <?php } ?>

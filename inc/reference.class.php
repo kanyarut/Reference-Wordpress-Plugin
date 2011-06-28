@@ -53,6 +53,7 @@ class Reference{
 			$options = get_post_meta($post->ID, '_ref',true);
 			if(isset($options['book']) && is_array($options['book'])){
 				wp_enqueue_script('jquery');
+				wp_enqueue_script('google_jsapi','http://www.google.com/jsapi');
 				wp_enqueue_script('colorbox', $x.'../js/colorbox/jquery.colorbox-min.js' );
 				wp_enqueue_style('colorbox-css', $x.'../js/colorbox/colorbox.css' );
 			}
@@ -153,7 +154,7 @@ class Reference{
 				$ref .= '<li>';
 				
 				if(isset($bo['haspreview']) && $bo['haspreview']=='1' && $bo['isbn']!=''){
-					$ref .= ' <a href="'.$x.'../previewbook.php?isbn='.$bo['isbn'].'" class="ref_preview_book" title="'.$bo['title'].'">
+					$ref .= ' <a href="'.$bo['isbn'].'" class="ref_preview_book" title="'.$bo['title'].'">
 							  <img src="'.$x.'../img/gbs_preview.png" alt="Google Book Preview" /></a>';
 				}
 				
@@ -197,7 +198,7 @@ class Reference{
 				$ref .= '<li>';
 				
 				if(isset($bo['haspreview']) && $bo['haspreview']=='1' && $bo['isbn']!=''){
-					$ref .= ' <a href="'.$x.'../previewbook.php?isbn='.$bo['isbn'].'" class="ref_preview_book" title="'.$bo['title'].'">
+					$ref .= ' <a href="'.$bo['isbn'].'" class="ref_preview_book" title="'.$bo['title'].'">
 							  <img src="'.$x.'../img/gbs_preview.png" alt="Google Book Preview" /></a>';
 				}
 				
@@ -247,7 +248,7 @@ class Reference{
 				$ref .= '<strong>'.$bo['title'].' </strong><small>by</small> <em>'.$bo['author'].'</em>';
 				if($link)$ref .= '</a>';
 				if(isset($bo['haspreview']) && $bo['haspreview']=='1' && $bo['isbn']!=''){
-					$ref .= ' | <a href="'.$x.'../previewbook.php?isbn='.$bo['isbn'].'" class="ref_preview_book" title="'.$bo['title'].'">Book Preview</a>';
+					$ref .= ' | <a href="'.$bo['isbn'].'" class="ref_preview_book" title="'.$bo['title'].'">Book Preview</a>';
 				}
 				
 				$ref .= '</div></li>';

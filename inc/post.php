@@ -148,5 +148,6 @@ if(isset($options['book']) && is_array($options['book'])){
 <script type="text/javascript">
 var pluginurl = "<?php echo $url ?>";
 </script>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript" src="<?php echo $url ?>../js/postedit.js"></script> 
 <br/>
