@@ -191,7 +191,7 @@ ul.ref_book_grid, ul.ref_book_full{
 	text-align: right;
 	padding: 3px 1px 0 0;
 }
-.ref_a_book_detail input, .ref_a_book_detail textarea{
+.ref_a_book_detail input,.ref_a_book_detail select, .ref_a_book_detail textarea{
 	width: 230px;
 	float: right;
 }

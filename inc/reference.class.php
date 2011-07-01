@@ -1,4 +1,4 @@
-<?
+<?php
 class Reference{
 	function plugin_menu() {
 		add_options_page( 'Reference Options', 'Reference Options', 'manage_options', 'reference', array($this,'plugin_options') );
@@ -143,13 +143,8 @@ class Reference{
 	
 	function book_show_grid($options){
 		$ref = '<ul class="ref_book_grid">';
-		$ref_options = get_option( 'ref_options' );
 		$x = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 		foreach($options['book'] as $bo){
-			$link = false;
-			if(is_array($ref_options) && isset($ref_options['ref_amazon_tag']) && $ref_options['ref_amazon_tag'] != '' && $bo['isbn']!=''){
-				$link = true;
-			}
 			if($bo['title']!=""){
 				$ref .= '<li>';
 				
@@ -161,16 +156,12 @@ class Reference{
 				$ref .= '<div class="book_ref">';
 				
 				if(isset($bo['thumbnailsm']) && $bo['thumbnailsm']!=''){
-					if($link)$ref .= '<a href="http://www.amazon.com/dp/'.$bo['isbn'].'?tag='.$ref_options['ref_amazon_tag'].'" title="'.$bo['title'].'">';
-					$ref .= '<img src="'.$bo['thumbnailsm'].'" class="ref_book_image" />';
-					if($link)$ref .= '</a>';
+					$ref .= $this->gen_book_link($bo,'<img src="'.$bo['thumbnailsm'].'" class="ref_book_image" />');
 				}
 				
 				$ref .= '<div class="ref_book_detail">';
 				
-				if($link)$ref .= '<a href="http://www.amazon.com/dp/'.$bo['isbn'].'?tag='.$ref_options['ref_amazon_tag'].'" title="'.$bo['title'].'">';
-				$ref .= '<strong>'.$bo['title'].' </strong>';
-				if($link)$ref .= '</a>';
+				$ref .= $this->gen_book_link($bo,'<strong>'.$bo['title'].' </strong>');
 				
 				if(isset($bo['author']) && $bo['author']!= "" )$ref .= '<br/><em>'.$bo['author'].'</em>';
 				$ref .= '<p>';
@@ -187,13 +178,8 @@ class Reference{
 	
 	function book_show_full($options){
 		$ref = '<ul class="ref_book_full">';
-		$ref_options = get_option( 'ref_options' );
 		$x = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 		foreach($options['book'] as $bo){
-			$link = false;
-			if(is_array($ref_options) && isset($ref_options['ref_amazon_tag']) && $ref_options['ref_amazon_tag'] != '' && $bo['isbn']!=''){
-				$link = true;
-			}
 			if($bo['title']!=""){
 				$ref .= '<li>';
 				
@@ -205,17 +191,13 @@ class Reference{
 				$ref .= '<div class="book_ref">';
 				
 				if(isset($bo['thumbnail']) && $bo['thumbnail']!=''){
-					if($link)$ref .= '<a href="http://www.amazon.com/dp/'.$bo['isbn'].'?tag='.$ref_options['ref_amazon_tag'].'" title="'.$bo['title'].'">';
-					$ref .= '<img src="'.$bo['thumbnail'].'" class="ref_book_image" />';
-					if($link)$ref .= '</a>';
+					$ref .= $this->gen_book_link($bo,'<img src="'.$bo['thumbnail'].'" class="ref_book_image" />');
 				}
 				
 				$ref .= '<div class="ref_book_detail">';
 				
 				$ref .= '<p>';
-				if($link)$ref .= '<a href="http://www.amazon.com/dp/'.$bo['isbn'].'?tag='.$ref_options['ref_amazon_tag'].'" title="'.$bo['title'].'">';
-				$ref .= '<strong>'.$bo['title'].' </strong>';
-				if($link)$ref .= '</a>';
+				$ref .= $this->gen_book_link($bo,'<strong>'.$bo['title'].' </strong>');
 				if(isset($bo['author']) && $bo['author']!= "" )$ref .= '<br/><em>'.$bo['author'].'</em>';
 				$ref .= '</p>';
 				
@@ -235,18 +217,11 @@ class Reference{
 	
 	function book_show_list($options){
 		$ref = '<ul class="ref_book_list">';
-		$ref_options = get_option( 'ref_options' );
 		$x = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 		foreach($options['book'] as $bo){
-			$link = false;
-			if(is_array($ref_options) && isset($ref_options['ref_amazon_tag']) && $ref_options['ref_amazon_tag'] != '' && $bo['isbn']!=''){
-				$link = true;
-			}
 			if($bo['title']!=""){
 				$ref .= '<li class="boxlist"><div class="box accent book_ref">';
-				if($link)$ref .= '<a href="http://www.amazon.com/dp/'.$bo['isbn'].'?tag='.$ref_options['ref_amazon_tag'].'" title="'.$bo['title'].'">';
-				$ref .= '<strong>'.$bo['title'].' </strong><small>by</small> <em>'.$bo['author'].'</em>';
-				if($link)$ref .= '</a>';
+				$ref .= $this->gen_book_link($bo,'<strong>'.$bo['title'].' </strong><small>by</small> <em>'.$bo['author'].'</em>');
 				if(isset($bo['haspreview']) && $bo['haspreview']=='1' && $bo['isbn']!=''){
 					$ref .= ' | <a href="'.$bo['isbn'].'" class="ref_preview_book" title="'.$bo['title'].'">Book Preview</a>';
 				}
@@ -255,6 +230,34 @@ class Reference{
 			}
 		}
 		$ref .= "</ul>";
+		return $ref;
+	}
+	
+	function gen_book_link($book,$after){
+		$ref_options = get_option( 'ref_options' );
+		$ref = $after;
+		
+		if(isset($book['linkto']) && $book['linkto'] == 'none'){
+			// not building like
+			$ref = $after;
+		}else if(isset($book['linkto']) && $book['linkto'] == 'Google'){
+			// link to google books with isbn-10
+			$ref = '<a href="http://books.google.com/books?isbn='.$book['isbn'].'" title="'.$book['title'].'">'.$after.'</a>';
+		}else if(isset($book['linkto']) && $book['linkto'] == 'External'){
+			// link to external site, check to make sure link is valid
+			if(isset($book['external']) && $book['external']!=''){
+				// valid url
+				$ref = '<a href="'.$book['external'].'" title="'.$book['title'].'">'.$after.'</a>';
+			}else{
+				$ref = $after;
+			}
+		}else if(!isset($book['linkto']) || ((isset($book['linkto']) && $book['linkto'] == 'Amazon' ))){
+			// default is amazon, using isbn with Affiliate tag id
+			if(isset($ref_options['ref_amazon_tag']) && $ref_options['ref_amazon_tag']!='')$amztag = $ref_options['ref_amazon_tag'];
+			else $amztag = 'thougsnippabl-20';
+			
+			$ref = '<a href="http://www.amazon.com/dp/'.$book['isbn'].'?tag='.$amztag.'" title="'.$book['title'].'">'.$after.'</a>';	
+		}
 		return $ref;
 	}
 }

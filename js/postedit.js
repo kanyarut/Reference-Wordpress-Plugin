@@ -64,10 +64,28 @@ jQuery(document).ready(function(){
 				+'		<label>Publisher:</label>'
 				+'		<input type="text" name="ref[book]['+book+'][publisher]" value="" placeholder="Publisher Name" class="ref-book-publisher" />'
 				+'	</p>'
+				+'	<p>'
+				+'		<label>Link to:</label>'
+				+'		<select name="ref[book]['+book+'][linkto]"  class="ref-book-linkto">'
+				+'			<option value="none">No Link</option>'
+				+'			<option value="Amazon" selected="selected">Amazon</option>'
+				+'			<option value="Google">Google Books</option>'
+				+'			<option value="External">External Link</option>'
+				+'		</select>'
+				+'		<input type="text" name="ref[book]['+book+'][external]" value="" placeholder="http://www.example.com/" class="ref-book-external" style="display:none" />'
+				+'	</p>'
 				+'</div>'
 			+'</div>';
 				
 		jQuery('#ref-book-container').append($tmp);
+	});
+	
+	jQuery('.ref-book-linkto').change(function(){
+		if(jQuery(this).val() === 'External'){
+			jQuery(this).siblings('.ref-book-external').slideDown();
+		}else{
+			jQuery(this).siblings('.ref-book-external').slideUp();
+		}
 	});
 	
 	var $ref_book_review = jQuery('<div id="ref_book_review" style="display:none"></div>').appendTo(jQuery('body'));

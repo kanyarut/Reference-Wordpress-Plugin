@@ -1,4 +1,4 @@
-<? $url = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)); ?>
+<?php $url = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)); ?>
 <div class="inside">
 <h2>Related Entries: <button type="button" class="button-secondary" id="ref-add-related">Select Related Posts</button></h2>
 <ul id="ref-selected-related" style="width:94%;padding-left:10px;">
@@ -83,6 +83,16 @@ if(isset($options['book']) && is_array($options['book'])){
 				<label>Publisher:</label>
 				<input type="text" name="ref[book][<?php echo $i ?>][publisher]" value="<?php echo (isset($bo['publisher']))?$bo['publisher']:''; ?>" placeholder="Publisher Name" class="ref-book-publisher" />
 			</p>
+			<p>
+				<label>Link to:</label> 
+				<select name="ref[book][<?php echo $i ?>][linkto]"  class="ref-book-linkto">
+					<option value="none" <?php echo (isset($bo['linkto']) && $bo['linkto']=='none')?'selected="selected"':''; ?>>No Link</option>
+					<option value="Amazon" <?php echo (!isset($bo['linkto']) || (isset($bo['linkto']) && ($bo['linkto']=='Amazon' || $bo['linkto']=='')))?'selected="selected"':''; ?>>Amazon</option>
+					<option value="Google" <?php echo (isset($bo['linkto']) && $bo['linkto']=='Google')?'selected="selected"':''; ?>>Google Books</option>
+					<option value="External" <?php echo (isset($bo['linkto']) && $bo['linkto']=='External')?'selected="selected"':''; ?>>External Link</option>
+				</select>
+				<input type="text" name="ref[book][<?php echo $i ?>][external]" value="<?php echo (isset($bo['v']))?$bo['external']:''; ?>" placeholder="http://www.example.com/" class="ref-book-external"  style="<?php echo (isset($bo['linkto']) && $bo['linkto']=='External')?'':'display:none'; ?>" />
+			</p>
 		</div>
 	</div>	
 <?php $i++; } //end for external
@@ -116,6 +126,16 @@ if(isset($options['book']) && is_array($options['book'])){
 		<p>
 			<label>Publisher:</label>
 			<input type="text" name="ref[book][1][publisher]" value="" placeholder="Publisher Name" class="ref-book-publisher" />
+		</p>
+		<p>
+			<label>Link to:</label> 
+			<select name="ref[book][1][linkto]"  class="ref-book-linkto">
+				<option value="none">No Link</option>
+				<option value="Amazon" selected="selected">Amazon</option>
+				<option value="Google">Google Books</option>
+				<option value="External">External Link</option>
+			</select>
+			<input type="text" name="ref[book][1][external]" value="" placeholder="http://www.example.com/" class="ref-book-external" style="display:none" />
 		</p>
 	</div>
 </div>
