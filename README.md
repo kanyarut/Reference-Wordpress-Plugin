@@ -1,8 +1,5 @@
 # Reference Plugin for Wordpress
 
-## Demo
-[Demo Reference Plugin](http://book.u-blue.com/)
-
 ## Installation
 
 **Download** [Reference Plugin from Github](https://github.com/nblue/Reference-Wordpress-Plugin)
