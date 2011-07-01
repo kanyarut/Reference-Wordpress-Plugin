@@ -1,12 +1,14 @@
 <?php
-	/*
-	Plugin Name: Reference
-	Plugin URI: https://github.com/nblue/Reference-Wordpress-Plugin
-	Description: Add references from posts, urls, and books into your post. Featured Google Books Search and Preview.
-	Author: Nice
-	Version: 0.1
-	Author URI: http://blog.u-blue.com
-	*/
+/*
+Plugin Name: Reference
+Plugin URI: https://github.com/nblue/Reference-Wordpress-Plugin
+Description: Add references from posts, urls, and books into your post. Featured Google Books Search, Book Preview and Amazon Affiliate link.
+Author: Nice
+Version: 0.3
+Author URI: http://blog.u-blue.com
+License: GNU General Public License 3.0 (GPL) http://www.gnu.org/licenses/gpl.html
+*/
+
 $x = WP_PLUGIN_DIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 require_once($x.'inc/reference.class.php');
 $reference = new Reference;
